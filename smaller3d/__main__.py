@@ -13,7 +13,8 @@ from smaller3d import __version__
 from smaller3d.trainer.trainer import SemanticSegmentation
 from smaller3d.utils.utils import (
     flatten_dict,
-    load_baseline_TeacherStudent_model,
+    load_baseline_Teacher_model,
+    load_baseline_Student_model,
     load_checkpoint_with_missing_or_exsessive_keys,
 )
 from pytorch_lightning import Trainer, seed_everything
@@ -60,11 +61,18 @@ def get_parameters(cfg: DictConfig):
         # )
 
     model = SemanticSegmentation(cfg)
-    if cfg.general.checkpoint is not None:
-        if cfg.general.checkpoint[-3:] == "pth":
+    if cfg.general.checkpoint_teacher is not None:
+        if cfg.general.checkpoint_teacher[-3:] == "pth":
             # loading model weights, if it has .pth in the end, it will work with it
             # as if it work with original Minkowski weights
-            cfg, model = load_baseline_TeacherStudent_model(cfg, SemanticSegmentation)
+            cfg, model = load_baseline_Teacher_model(cfg, SemanticSegmentation)
+        else:
+            cfg, model = load_checkpoint_with_missing_or_exsessive_keys(cfg, model)
+    if cfg.general.checkpoint_student is not None:
+        if cfg.general.checkpoint_student[-3:] == "pth":
+            # loading model weights, if it has .pth in the end, it will work with it
+            # as if it work with original Minkowski weights
+            cfg, model = load_baseline_Student_model(cfg, SemanticSegmentation)
         else:
             cfg, model = load_checkpoint_with_missing_or_exsessive_keys(cfg, model)
 

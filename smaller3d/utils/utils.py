@@ -18,20 +18,33 @@ def flatten_dict(d, parent_key="", sep="_"):
     return dict(items)
 
 
-def load_baseline_TeacherStudent_model(cfg, model):
+def load_baseline_Teacher_model(cfg, model):
     # if it is Minkoski weights
-    cfg.model.in_channels = 3
-    cfg.model.config.conv1_kernel_size = 5
+    cfg.model_teacher.in_channels = 3
+    cfg.model_teacher.config.conv1_kernel_size = 5
     cfg.data.add_normals = False
     cfg.data.train_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
     cfg.data.validation_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
     cfg.data.test_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
     cfg.data.voxel_size = 0.02
-    model = model(cfg)
-    state_dict = torch.load(cfg.general.checkpoint)["state_dict"]
-    model.model.load_state_dict(state_dict)
-    return cfg, model
+    model_teacher = model_teacher(cfg)
+    state_dict = torch.load(cfg.general.checkpoint_teacher)["state_dict"]
+    model_teacher.model.load_state_dict(state_dict)
+    return cfg, model_teacher
 
+def load_baseline_Student_model(cfg, model):
+    # if it is Minkoski weights
+    cfg.model_student.in_channels = 3
+    cfg.model_student.config.conv1_kernel_size = 5
+    cfg.data.add_normals = False
+    cfg.data.train_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
+    cfg.data.validation_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
+    cfg.data.test_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
+    cfg.data.voxel_size = 0.02
+    model_student = model_student(cfg)
+    state_dict = torch.load(cfg.general.checkpoint_student)["state_dict"]
+    model_student.model.load_state_dict(state_dict)
+    return cfg, model_student
 
 def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
     state_dict = torch.load(cfg.general.checkpoint)["state_dict"]
