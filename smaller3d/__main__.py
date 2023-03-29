@@ -55,9 +55,9 @@ def get_parameters(cfg: DictConfig):
         #         cfg.general.version = loggers[-1].version
         # else:
         loggers.append(hydra.utils.instantiate(log))
-        loggers[-1].log_hyperparams(
-            flatten_dict(OmegaConf.to_container(cfg, resolve=True))
-        )
+        # loggers[-1].log_hyperparams(
+        #     flatten_dict(OmegaConf.to_container(cfg, resolve=True))
+        # )
 
     model = SemanticSegmentation(cfg)
     if cfg.general.checkpoint is not None:
