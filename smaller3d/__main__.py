@@ -86,7 +86,7 @@ def get_parameters(cfg: DictConfig):
 def train(cfg : DictConfig):
     # because hydra wants to change dir for some reason
     os.chdir(hydra.utils.get_original_cwd())
-    cfg, model, model ,loggers = get_parameters(cfg)
+    cfg, model ,loggers = get_parameters(cfg)
     print("hey bitch it is how it works!!!")
 
     callbacks = []
