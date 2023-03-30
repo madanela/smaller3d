@@ -34,20 +34,22 @@ class SemanticSegmentation(pl.LightningModule):
 
     def forward(self, x):
         # Teacher network
+        with self.optional_freeze():
+            sout = self.student_model(x)
+        sout = self.student_model.final(sout)
+        return sout
+    def forward_teacher(self,x):
         with torch.no_grad():
             tout = self.teacher_model(x)
             tout = self.teacher_model.final(tout)
+        return tout
         
-        with self.optional_freeze():
-            sout = self.model(x)
-        sout = self.model.final(sout)
-        return tout,sout
-
     def training_step(self, batch, batch_idx):
         data, target = batch
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
-        tout,sout = self.forward(data)
+        tout = self.forward_teacher(data)
+        sout = self.forward(data)
         loss = self.criterion(sout.F, tout.F).unsqueeze(0)
 
         return {
@@ -60,7 +62,8 @@ class SemanticSegmentation(pl.LightningModule):
         original_labels = data.original_labels
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
-        tout,sout = self.forward(data)
+        tout = self.forward_teacher(data)
+        sout = self.forward(data)
         loss = self.criterion(sout.F, tout.F).unsqueeze(0)
 
         # getting original labels
@@ -102,7 +105,8 @@ class SemanticSegmentation(pl.LightningModule):
         original_labels = data.original_labels
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
-        tout,sout = self.forward(data)
+        tout = self.forward_teacher(data)
+        sout = self.forward(data)
         loss = 0
         if original_labels[0].size > 0:
             loss = self.criterion(sout.F, tout.F).unsqueeze(0)

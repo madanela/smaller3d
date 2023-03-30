@@ -13,6 +13,7 @@ from smaller3d import __version__
 from smaller3d.trainer.trainer import SemanticSegmentation
 from smaller3d.utils.utils import (
     flatten_dict,
+    load_baseline_model,
     load_baseline_Teacher_model,
     load_baseline_Student_model,
     load_checkpoint_with_missing_or_exsessive_keys,
@@ -65,16 +66,17 @@ def get_parameters(cfg: DictConfig):
         if cfg.general.checkpoint_teacher[-3:] == "pth":
             # loading model weights, if it has .pth in the end, it will work with it
             # as if it work with original Minkowski weights
-            cfg, model = load_baseline_Teacher_model(cfg, SemanticSegmentation)
+            cfg, model = load_baseline_model(cfg, SemanticSegmentation)
         else:
             cfg, model = load_checkpoint_with_missing_or_exsessive_keys(cfg, model)
-    if cfg.general.checkpoint_student is not None:
-        if cfg.general.checkpoint_student[-3:] == "pth":
-            # loading model weights, if it has .pth in the end, it will work with it
-            # as if it work with original Minkowski weights
-            cfg, model = load_baseline_Student_model(cfg, SemanticSegmentation)
-        else:
-            cfg, model = load_checkpoint_with_missing_or_exsessive_keys(cfg, model)
+    
+    # if cfg.general.checkpoint_student is not None:
+    #     if cfg.general.checkpoint_student[-3:] == "pth":
+    #         # loading model weights, if it has .pth in the end, it will work with it
+    #         # as if it work with original Minkowski weights
+    #         cfg, model = load_baseline_Student_model(cfg, SemanticSegmentation)
+    #     else:
+    #         cfg, model = load_checkpoint_with_missing_or_exsessive_keys(cfg, model)
 
     logger.info(flatten_dict(OmegaConf.to_container(cfg, resolve=True)))
     return cfg, model, loggers
@@ -84,7 +86,7 @@ def get_parameters(cfg: DictConfig):
 def train(cfg : DictConfig):
     # because hydra wants to change dir for some reason
     os.chdir(hydra.utils.get_original_cwd())
-    cfg, teacher_model, student_model ,loggers = get_parameters(cfg)
+    cfg, model, model ,loggers = get_parameters(cfg)
     print("hey bitch it is how it works!!!")
 
     callbacks = []
@@ -97,14 +99,14 @@ def train(cfg : DictConfig):
         weights_save_path=str(cfg.general.save_dir),
         **cfg.trainer,
     )
-    runner.fit(teacher_model,student_model)
+    runner.fit(model)
 
 
 @hydra.main(config_path="conf", config_name="config.yaml")
 def test(cfg : DictConfig):
     # because hydra wants to change dir for some reason
     os.chdir(hydra.utils.get_original_cwd())
-    cfg, teacher_model, student_model ,loggers = get_parameters(cfg)
+    cfg, model ,loggers = get_parameters(cfg)
     print("hey bitch it is how it works!!!")
     runner = Trainer(
         gpus=cfg.general.gpus,
@@ -112,5 +114,5 @@ def test(cfg : DictConfig):
         weights_save_path=str(cfg.general.save_dir),
         **cfg.trainer,
     )
-    runner.test(teacher_model, student_model)
+    runner.test(model)
 train()
