@@ -14,8 +14,8 @@ from smaller3d.trainer.trainer import SemanticSegmentation
 from smaller3d.utils.utils import (
     flatten_dict,
     load_baseline_model,
-    load_baseline_Teacher_model,
-    load_baseline_Student_model,
+    # load_baseline_Teacher_model,
+    # load_baseline_Student_model,
     load_checkpoint_with_missing_or_exsessive_keys,
 )
 from pytorch_lightning import Trainer, seed_everything
