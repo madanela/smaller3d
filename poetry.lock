@@ -1376,7 +1376,7 @@ description = "['Open3D is an open-source library that supports rapid developmen
 name = "open3d"
 optional = false
 python-versions = "*"
-version = "0.9.0"
+version = "0.9.0.0"
 
 [package.dependencies]
 ipywidgets = "*"
