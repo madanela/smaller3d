@@ -34,9 +34,10 @@ def kd_loss(student_outputs, teacher_outputs, target_labels, alpha=0.5, temperat
 
 
 class DistillationLoss(nn.Module):     
-    def __init__(self, temperature=1):
+    def __init__(self, temperature=1,alpha = 1.0):
         super().__init__()        
         self.temperature = temperature
+        self.alpha = alpha
     def forward(self, student_logits, teacher_logits):
         # Compute the soft targets from the teacher model        
         soft_targets = F.softmax(teacher_logits / self.temperature, dim=1)
