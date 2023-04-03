@@ -64,7 +64,7 @@ class SemanticSegmentation(pl.LightningModule):
         data.to(self.device)
         tout = self.forward_teacher(data)
         sout = self.forward(data)
-        loss = self.criterion(sout.F, tout.F).unsqueeze(0)
+        loss = self.criterion(sout.F, tout.F) #.unsqueeze(0)
 
         # getting original labels
         ordered_output = []
