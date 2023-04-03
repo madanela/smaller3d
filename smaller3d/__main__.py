@@ -87,7 +87,6 @@ def train(cfg : DictConfig):
     # because hydra wants to change dir for some reason
     os.chdir(hydra.utils.get_original_cwd())
     cfg, model ,loggers = get_parameters(cfg)
-    print("hey bitch it is how it works!!!")
 
     callbacks = []
     for cb in cfg.callbacks:
@@ -107,7 +106,7 @@ def test(cfg : DictConfig):
     # because hydra wants to change dir for some reason
     os.chdir(hydra.utils.get_original_cwd())
     cfg, model ,loggers = get_parameters(cfg)
-    print("hey bitch it is how it works!!!")
+
     runner = Trainer(
         gpus=cfg.general.gpus,
         logger=loggers,
