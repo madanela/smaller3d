@@ -45,7 +45,7 @@ class DistillationLoss(nn.Module):
         # Compute the cross-entropy loss between the soft targets and the output probabilities        
         loss_ce = nn.CrossEntropyLoss()(student_logits, torch.argmax(soft_targets, dim=1))
         # Compute the distillation loss using the gradients with respect to the logits
-        loss_dist = torch.mean(torch.sum((student_logits - teacher_logits)  2, dim=1)) / (2 * self.temperature ** 2)        
+        loss_dist = torch.mean(torch.sum((student_logits - teacher_logits) **  2, dim=1)) / (2 * self.temperature ** 2)        
         # Compute the total loss as a linear combination of the cross-entropy loss and the distillation loss       
         loss = (1 - self.alpha) * loss_ce + self.alpha * loss_dist
         return loss
