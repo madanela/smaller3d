@@ -29,7 +29,7 @@ defaults:
   - scheduler: onecyclelr
   - trainer: trainer
   - callbacks: callbacks
-  - loss: cross_entropy
+  - loss: DistillationLoss
 
 hydra:
   run:
