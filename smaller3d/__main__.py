@@ -45,21 +45,21 @@ def get_parameters(cfg: DictConfig):
     cfg.general.version = md5(str(params).encode("utf-8")).hexdigest()[:8] + unique_id
 
     for log in cfg.logging:
-        # if "NeptuneLogger" in log._target_:
-        #     loggers.append(
-        #         hydra.utils.instantiate(
-        #             log, api_key=os.environ.get("NEPTUNE_API_TOKEN"), params=params,
-        #         )
-        #     )
-        #     print(os.environ.get("NEPTUNE_API_TOKEN"))
-        #     print(loggers)
-        #     if "offline" not in loggers[-1].version:
-        #         cfg.general.version = loggers[-1].version
-        # else:
-        loggers.append(hydra.utils.instantiate(log))
-        # loggers[-1].log_hyperparams(
-        #     flatten_dict(OmegaConf.to_container(cfg, resolve=True))
-        # )
+        if "NeptuneLogger" in log._target_:
+            loggers.append(
+                hydra.utils.instantiate(
+                    log, api_key=os.environ.get("NEPTUNE_API_TOKEN"), params=params,
+                )
+            )
+            print(os.environ.get("NEPTUNE_API_TOKEN"))
+            print(loggers)
+            if "offline" not in loggers[-1].version:
+                cfg.general.version = loggers[-1].version
+        else:
+            loggers.append(hydra.utils.instantiate(log))
+            loggers[-1].log_hyperparams(
+                flatten_dict(OmegaConf.to_container(cfg, resolve=True))
+            )
 
     model = SemanticSegmentation(cfg)
     if cfg.general.checkpoint_teacher is not None:
