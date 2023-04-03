@@ -64,8 +64,8 @@ class SemanticSegmentation(pl.LightningModule):
         data.to(self.device)
         tout = self.forward_teacher(data)#.type(torch.float32)
         sout = self.forward(data)#.type(torch.float32)
-        sans = torch.tensor(sout.F,dtype = torch.float32)
-        tans = torch.tensor(tout.F,dtype = torch.float32)
+        sans = torch.tensor(sout.F,dtype = torch.float32).unsqueeze(0)
+        tans = torch.tensor(tout.F,dtype = torch.float32).unsqueeze(0)
         loss = self.criterion(sans, tans).unsqueeze(0)
 
         # getting original labels
