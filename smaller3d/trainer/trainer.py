@@ -62,20 +62,20 @@ class SemanticSegmentation(pl.LightningModule):
         original_labels = data.original_labels
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
-        tout = self.forward_teacher(data).F#.type(torch.float32)
-        sout = self.forward(data).F#.type(torch.float32)
+        tout = self.forward_teacher(data)#.type(torch.float32)
+        sout = self.forward(data)#.type(torch.float32)
         # sans = torch.tensor(sout.F,dtype = torch.float32).unsqueeze(0)
         # tans = torch.tensor(tout.F,dtype = torch.float32).unsqueeze(0)
 
-        print("sans shape is ",sout.shape, " and tans shape is: ",tout.shape)
-        print("Next one is target!!!")
-        print(target.shape)
-        print(target.dtype)
-        print("Next one is student!!!")
+        # print("sans shape is ",sout.shape, " and tans shape is: ",tout.shape)
+        # print("Next one is target!!!")
+        # print(target.shape)
+        # print(target.dtype)
+        # print("Next one is student!!!")
 
-        print(sout.shape)
-        print(sout.dtype)
-        loss = self.criterion(sout, tout).unsqueeze(0)
+        # print(sout.shape)
+        # print(sout.dtype)
+        loss = self.criterion(sout.F, tout.F).unsqueeze(0)
 
         # getting original labels
         ordered_output = []
