@@ -64,6 +64,7 @@ class SemanticSegmentation(pl.LightningModule):
         data.to(self.device)
         tout = self.forward_teacher(data)
         sout = self.forward(data)
+        print("sout shape is :",sout.F.shape," and tout shape is:", tout.F.shape )
         loss = self.criterion(sout.F, tout.F) #.unsqueeze(0)
 
         # getting original labels
