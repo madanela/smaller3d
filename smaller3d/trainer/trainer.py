@@ -19,6 +19,11 @@ class SemanticSegmentation(pl.LightningModule):
         self.save_hyperparameters()
         # model
         self.teacher_model = hydra.utils.instantiate(config.teacher_model)
+
+        # freeze model
+        for param in self.teacher_model.parameters():
+            param.requires_grad = False
+
         self.student_model = hydra.utils.instantiate(config.student_model)
         self.optional_freeze = nullcontext
         if config.general.freeze_backbone:
