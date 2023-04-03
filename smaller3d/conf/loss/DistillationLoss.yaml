@@ -1,4 +1,3 @@
 # @package _group_
 _target_: smaller3d.loss.KD_loss.DistillationLoss
-ignore_index: ${data.ignore_label}
 temperature: 2
