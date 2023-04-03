@@ -68,7 +68,7 @@ class SemanticSegmentation(pl.LightningModule):
         tans = torch.tensor(tout.F,dtype = torch.float32).unsqueeze(0)
 
         print("sans shape is ",sans.shape, " and tans shape is: ",tans.shape)
-        loss = self.criterion(sans, tans) # .unsqueeze(0)
+        loss = self.criterion(sans, tans).unsqueeze(0)
 
         # getting original labels
         ordered_output = []
