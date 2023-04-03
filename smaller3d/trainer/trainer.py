@@ -65,7 +65,7 @@ class SemanticSegmentation(pl.LightningModule):
         tout = self.forward_teacher(data)#.type(torch.float32)
         sout = self.forward(data)#.type(torch.float32)
         
-        loss = self.criterion(sout.F, tout).unsqueeze(0)
+        loss = self.criterion(sout.F, tout.F).unsqueeze(0)
 
         # getting original labels
         ordered_output = []
