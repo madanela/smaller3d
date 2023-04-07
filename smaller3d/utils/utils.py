@@ -60,19 +60,20 @@ def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
         print("state_dict key1 :", key1, "correct_dict and key2 :",key2)
     for key in correct_dict.keys():
         print("key :: ",key)
-        print(state_dict[key].shape ,"   and    ", correct_dict[key].shape)
-        if state_dict[key].shape != correct_dict[key].shape:
+        print(state_dict["model."+key].shape ,"   and    ", correct_dict[key].shape)
+        if state_dict["model."+key].shape != correct_dict[key].shape:
             logger.warning(
-                f"incorrect shape {key}:{state_dict[key].shape} vs {correct_dict[key].shape}"
+                f"incorrect shape {key}:{state_dict['model.' + key].shape} vs {correct_dict[key].shape}"
             )
-            state_dict.update({key: correct_dict[key]})
+            state_dict.update({"model."+key: correct_dict[key]})
 
     # if we have more keys just discard them
     correct_dict = dict(model.teacher_model.state_dict())
     new_state_dict = dict()
     for key in state_dict.keys():
-        if key in correct_dict.keys():
-            new_state_dict.update({key: state_dict[key]})
+        key_st = key[:len("model.")]
+        if key_st in correct_dict.keys():
+            new_state_dict.update({key_st: state_dict[key]})
         else:
             logger.warning(f"excessive key: {key}")
     model.teacher_model.load_state_dict(new_state_dict)
