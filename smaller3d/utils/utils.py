@@ -54,7 +54,7 @@ def load_baseline_Student_model(cfg, model):
     return cfg, model_student
 
 def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
-    state_dict = torch.load(cfg.general.checkpoint)["state_dict"]
+    state_dict = torch.load(cfg.general.checkpoint_teacher)["state_dict"]
     correct_dict = dict(model.state_dict())
 
     # if parametrs not found in checkpoint they will be randomly initialized
@@ -63,7 +63,7 @@ def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
             logger.warning(f"Key not found, it will be initialized randomly: {key}")
 
     # if parametrs have different shape, it will randomly initialize
-    state_dict = torch.load(cfg.general.checkpoint)["state_dict"]
+    state_dict = torch.load(cfg.general.checkpoint_teacher)["state_dict"]
     correct_dict = dict(model.state_dict())
     for key in correct_dict.keys():
         if state_dict[key].shape != correct_dict[key].shape:
