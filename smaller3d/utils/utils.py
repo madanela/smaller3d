@@ -47,7 +47,7 @@ def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
 
     # if parametrs not found in checkpoint they will be randomly initialized
     for key in state_dict.keys():
-        if correct_dict.pop(key, None) is None:
+        if correct_dict.pop(key[len("model."):], None) is None:
             logger.warning(f"Key not found, it will be initialized randomly: {key}")
 
     # if parametrs have different shape, it will randomly initialize
