@@ -67,6 +67,7 @@ def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
     state_dict = torch.load(cfg.general.checkpoint_teacher)["state_dict"]
     correct_dict = dict(model.state_dict())
     for key in correct_dict.keys():
+        print(state_dict[key].shape ,"   and    ", correct_dict[key].shape)
         if state_dict[key].shape != correct_dict[key].shape:
             logger.warning(
                 f"incorrect shape {key}:{state_dict[key].shape} vs {correct_dict[key].shape}"
