@@ -72,6 +72,7 @@ def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
     new_state_dict = dict()
     for key in state_dict.keys():
         key_st = key[:len("model.")]
+        print(key_st ," and ",key)
         if key_st in correct_dict.keys():
             new_state_dict.update({key_st: state_dict[key]})
         else:
