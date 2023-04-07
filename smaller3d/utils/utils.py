@@ -52,8 +52,9 @@ def load_baseline_Student_model(cfg, model):
     state_dict = torch.load(cfg.general.checkpoint_student)["state_dict"]
     model_student.model.load_state_dict(state_dict)
     return cfg, model_student
-
+import os
 def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
+    print(os.listdir())
     state_dict = torch.load(cfg.general.checkpoint_teacher)["state_dict"]
     correct_dict = dict(model.state_dict())
 
