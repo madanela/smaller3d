@@ -1,6 +1,6 @@
 general:
   seed: null
-  checkpoint_teacher: null # continue with weights teacher model
+  checkpoint_teacher: saved/baseline/2023-03-20_2044 # continue with weights teacher model
   checkpoint_student: null # continue with weights student model
   freeze_backbone: false # train only last layer
 
