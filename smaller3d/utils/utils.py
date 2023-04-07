@@ -53,9 +53,11 @@ def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
     # if parametrs have different shape, it will randomly initialize
     state_dict = torch.load(cfg.general.checkpoint_teacher)["state_dict"]
     correct_dict = dict(model.teacher_model.state_dict())
-    print(correct_dict)
+    # print(correct_dict)
     print("next is state dict")
-    print(state_dict)
+    # print(state_dict)
+    for key1,key2 in zip(state_dict.keys(),correct_dict.keys()):
+        print("state_dict key1 :", key1, "correct_dict and key2 :",key2)
     for key in correct_dict.keys():
         print("key :: ",key)
         print(state_dict[key].shape ,"   and    ", correct_dict[key].shape)
