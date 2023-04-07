@@ -39,19 +39,6 @@ def load_baseline_model(cfg, model):
     model.model_student.load_state_dict(state_dict)
     return cfg, model
 
-def load_baseline_Student_model(cfg, model):
-    # if it is Minkoski weights
-    cfg.model_student.in_channels = 3
-    cfg.model_student.config.conv1_kernel_size = 5
-    cfg.data.add_normals = False
-    cfg.data.train_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
-    cfg.data.validation_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
-    cfg.data.test_dataset.color_mean_std = [(0.5, 0.5, 0.5), (1, 1, 1)]
-    cfg.data.voxel_size = 0.02
-    model_student = model_student(cfg)
-    state_dict = torch.load(cfg.general.checkpoint_student)["state_dict"]
-    model_student.model.load_state_dict(state_dict)
-    return cfg, model_student
 import os
 def load_checkpoint_with_missing_or_exsessive_keys(cfg, model):
     print(cfg.general.checkpoint_teacher,os.listdir('saved/baseline/2023-03-20_2044'))
