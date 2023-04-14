@@ -1,6 +1,6 @@
 import smaller3d.models.resunet as resunet
 import smaller3d.models.res16unet as res16unet
-from smaller3d.models.res16unet import Res16UNet34C, Res16UNet34A, Res16UNet14A,Res16UNet34C_HALF
+from smaller3d.models.res16unet import Res16UNet34C, Res16UNet34A, Res16UNet14A,Res16UNet34C_HALF,Res16UNet34C_HALF_HALF
 from smaller3d.models.conditional_random_fields import BilateralCRF, TrilateralCRF
 
 MODELS = []
