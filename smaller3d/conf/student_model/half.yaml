@@ -1,5 +1,5 @@
 # @package _group_
-_target_: smaller3d.models.Res16UNet34C_HALF
+_target_: smaller3d.models.Res16UNet34C_HALF_HALF
 config:
   dialations: [1, 1, 1, 1]
   conv1_kernel_size: 5

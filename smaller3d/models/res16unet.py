@@ -360,6 +360,9 @@ class Res16UNet34C(Res16UNet34):
 class Res16UNet34C_HALF(Res16UNet34):
     PLANES = (16, 32, 64, 128, 128, 64, 48, 48)
 
+class Res16UNet34C_HALF_HALF(Res16UNet34):
+    PLANES = (8, 16, 32, 64, 64, 32, 24, 24)
+
 
 class STRes16UNetBase(Res16UNetBase):
 

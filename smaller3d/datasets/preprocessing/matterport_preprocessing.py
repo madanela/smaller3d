@@ -14,8 +14,8 @@ import numpy as np
 from fire import Fire
 from loguru import logger
 
-from mix3d.datasets.outdoor_semseg.base_preprocessing import BasePreprocessing
-from mix3d.utils.point_cloud_utils import load_ply_with_normals
+from smaller3d.datasets.outdoor_semseg.base_preprocessing import BasePreprocessing
+from smaller3d.utils.point_cloud_utils import load_ply_with_normals
 
 
 class MatterportPreprocessing(BasePreprocessing):
