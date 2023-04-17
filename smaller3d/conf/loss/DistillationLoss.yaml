@@ -1,4 +1,4 @@
 # @package _group_
 _target_: smaller3d.loss.KD_loss.DistillationLoss
-temperature: 7
-alpha: 1.
+temperature: 1
+alpha: .5
