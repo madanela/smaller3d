@@ -1,8 +1,7 @@
 # @package _group_
 _target_: smaller3d.models.Res16UNet34C_HALF
-
-
-   dialations: [1, 1, 1, 1]
+config:
+  dialations: [1, 1, 1, 1]
   conv1_kernel_size: 5
   bn_momentum: 0.02
 # depends on normals, color, raw_coordinates
