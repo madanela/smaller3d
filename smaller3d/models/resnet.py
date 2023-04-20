@@ -14,7 +14,6 @@ class ResNetBase(Model):
     OUT_PIXEL_DIST = 32
     HAS_LAST_BLOCK = False
     CONV_TYPE = ConvType.HYPERCUBE
-
     def __init__(self, in_channels, out_channels, config, D=3, **kwargs):
         assert self.BLOCK is not None
         assert self.OUT_PIXEL_DIST > 0
@@ -78,6 +77,7 @@ class ResNetBase(Model):
             stride=space_n_time_m(2, 1),
             dilation=space_n_time_m(dilations[3], 1),
         )
+        
 
         self.final = conv(
             self.PLANES[3] * self.BLOCK.expansion,
@@ -86,6 +86,7 @@ class ResNetBase(Model):
             bias=True,
             D=D,
         )
+
 
     def weight_initialization(self):
         for m in self.modules():
@@ -157,9 +158,10 @@ class ResNetBase(Model):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        x = self.layer4(x)
+        x_out = self.layer4(x)
 
-        x = self.final(x)
+        x = self.final(x_out)
+
         return x
 
 

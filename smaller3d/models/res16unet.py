@@ -16,6 +16,7 @@ class Res16UNetBase(ResNetBase):
     NORM_TYPE = NormType.BATCH_NORM
     NON_BLOCK_CONV_TYPE = ConvType.SPATIAL_HYPERCUBE
     CONV_TYPE = ConvType.SPATIAL_HYPERCUBE_TEMPORAL_HYPERCROSS
+    DECODER_CONV = None
 
     # To use the model, must call initialize_coords before forward pass.
     # Once data is processed, call clear to reset the model before calling initialize_coords
@@ -32,7 +33,8 @@ class Res16UNetBase(ResNetBase):
 
         if D == 4:
             self.OUT_PIXEL_DIST = space_n_time_m(self.OUT_PIXEL_DIST, 1)
-
+        if config.last_feature_map_included:
+            self.DECODER_CONV = True
         # Output of the first conv concated to conv6
         self.inplanes = self.INIT_DIM
         self.conv0p1s1 = conv(
@@ -214,7 +216,15 @@ class Res16UNetBase(ResNetBase):
             norm_type=self.NORM_TYPE,
             bn_momentum=bn_momentum,
         )
-
+        if self.DECODER_CONV:
+            self.ExpandSparseLayer = conv(
+            self.PLANES[7],
+            self.PLANES[7]*2,
+            kernel_size=1,
+            stride=1,
+            bias=True,
+            D=D
+        )
         self.final = conv(
             self.PLANES[7], out_channels, kernel_size=1, stride=1, bias=True, D=D
         )
@@ -277,7 +287,9 @@ class Res16UNetBase(ResNetBase):
 
         out = me.cat(out, out_p1)
         out = self.block8(out)
-
+        if self.DECODER_CONV:
+            x_out = self.ExpandSparseLayer(out)
+            return out,x_out
         return out
 
 
@@ -359,6 +371,7 @@ class Res16UNet34C(Res16UNet34):
 
 class Res16UNet34C_HALF(Res16UNet34):
     PLANES = (16, 32, 64, 128, 128, 64, 48, 48)
+
 
 class Res16UNet34C_HALF_HALF(Res16UNet34):
     PLANES = (8, 16, 32, 64, 64, 32, 24, 24)

@@ -53,9 +53,14 @@ class SemanticSegmentation(pl.LightningModule):
         data, target = batch
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
-        tout = self.forward_teacher(data)
-        sout = self.forward(data)
-        loss = self.criterion(sout.F, tout.F).unsqueeze(0)
+
+        tout1 = self.teacher_model(data)
+        tout2 = self.teacher_model.final(tout1)
+        sout1 = self.student_model(data)
+        sout2 = self.student_model.final(data)
+        loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
+        if self.student_model.last_feature_map_included:
+            loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
 
         return {
             "loss": loss,
@@ -67,22 +72,29 @@ class SemanticSegmentation(pl.LightningModule):
         original_labels = data.original_labels
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
-        tout = self.forward_teacher(data)#.type(torch.float32)
-        sout = self.forward(data)#.type(torch.float32)
 
-        loss = self.criterion(sout.F, tout.F).unsqueeze(0)
+
+
+        tout1 = self.teacher_model(data)
+        tout2 = self.teacher_model.final(tout1)
+        sout1 = self.student_model(data)
+        sout2 = self.student_model.final(data)
+        loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
+        if self.student_model.last_feature_map_included:
+            loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
+
 
         # getting original labels
         ordered_output = []
         for i in range(len(inverse_maps)):
             # https://github.com/NVIDIA/MinkowskiEngine/issues/119
-            ordered_output.append(sout.F[sout.C[:, 0] == i])
-        sout = ordered_output
-        for i, (out, inverse_map) in enumerate(zip(sout, inverse_maps)):
+            ordered_output.append(sout2.F[sout2.C[:, 0] == i])
+        sout2 = ordered_output
+        for i, (out, inverse_map) in enumerate(zip(sout2, inverse_maps)):
             out = out.max(1)[1].view(-1).detach().cpu()
-            sout[i] = out[inverse_map].numpy()
+            sout2[i] = out[inverse_map].numpy()
 
-        self.confusion.add(np.hstack(sout), np.hstack(original_labels))
+        self.confusion.add(np.hstack(sout2), np.hstack(original_labels))
         return {
             "val_loss": loss,
         }
