@@ -51,8 +51,6 @@ def get_parameters(cfg: DictConfig):
                     log, api_key=os.environ.get("NEPTUNE_API_TOKEN"), params=params,
                 )
             )
-            print(os.environ.get("NEPTUNE_API_TOKEN"))
-            print(loggers)
             if "offline" not in loggers[-1].version:
                 cfg.general.version = loggers[-1].version
         else:

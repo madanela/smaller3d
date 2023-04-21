@@ -222,8 +222,6 @@ class Res16UNetBase(ResNetBase):
             bn_momentum=bn_momentum,
         )
         if self.DECODER_CONV:
-            print("heeeeeeeeeeeeeeeeey!!!!\n"*50)
-
             self.ExpandSparseLayer = conv_expand(
             self.PLANES[7],
             self.PLANES[7]*2,
@@ -232,11 +230,9 @@ class Res16UNetBase(ResNetBase):
             bias=True,
             D=D
             )
-            print(self.ExpandSparseLayer)
         self.final = conv(
             self.PLANES[7], out_channels, kernel_size=1, stride=1, bias=True, D=D
         )
-        print(self.final)
         self.relu = MinkowskiReLU(inplace=True)
 
     def forward(self, x):
