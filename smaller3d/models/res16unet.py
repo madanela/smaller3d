@@ -21,6 +21,9 @@ class Res16UNetBase(ResNetBase):
     # To use the model, must call initialize_coords before forward pass.
     # Once data is processed, call clear to reset the model before calling initialize_coords
     def __init__(self, in_channels, out_channels, config, D=3, **kwargs):
+        print("===="*200)
+        print("config last feature map is :~~",config.last_feature_map_included)
+        print("===="*200)
         super().__init__(in_channels, out_channels, config, D)
 
     def network_initialization(self, in_channels, out_channels, config, D):
@@ -34,6 +37,7 @@ class Res16UNetBase(ResNetBase):
         if D == 4:
             self.OUT_PIXEL_DIST = space_n_time_m(self.OUT_PIXEL_DIST, 1)
         if config.last_feature_map_included:
+            print(config.last)
             self.DECODER_CONV = True
         # Output of the first conv concated to conv6
         self.inplanes = self.INIT_DIM
