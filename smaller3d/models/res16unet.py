@@ -39,7 +39,7 @@ class Res16UNetBase(ResNetBase):
         if D == 4:
             self.OUT_PIXEL_DIST = space_n_time_m(self.OUT_PIXEL_DIST, 1)
         if config.last_feature_map_included:
-            print(config.last)
+            print("heeeeeeeeeeeeeeeeey!!!!\n"*50)
             self.DECODER_CONV = True
         # Output of the first conv concated to conv6
         self.inplanes = self.INIT_DIM
