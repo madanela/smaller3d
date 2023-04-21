@@ -21,11 +21,11 @@ class Res16UNetBase(ResNetBase):
     # To use the model, must call initialize_coords before forward pass.
     # Once data is processed, call clear to reset the model before calling initialize_coords
     def __init__(self, in_channels, out_channels, config, D=3, **kwargs):
-        print("===="*200)
-        print("just config",config)
-        print("DECODER_CONV : ",self.DECODER_CONV)
-        print("config last feature map is :~~",config.last_feature_map_included)
-        print("===="*200)
+        # print("===="*200)
+        # print("just config",config)
+        # print("DECODER_CONV : ",self.DECODER_CONV)
+        # print("config last feature map is :~~",config.last_feature_map_included)
+        # print("===="*200)
         super().__init__(in_channels, out_channels, config, D)
 
     def network_initialization(self, in_channels, out_channels, config, D):
