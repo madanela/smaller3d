@@ -17,7 +17,7 @@ class Res16UNetBase(ResNetBase):
     NON_BLOCK_CONV_TYPE = ConvType.SPATIAL_HYPERCUBE
     CONV_TYPE = ConvType.SPATIAL_HYPERCUBE_TEMPORAL_HYPERCROSS
     DECODER_CONV = None
-
+    ExpandSparseLayer = None
     # To use the model, must call initialize_coords before forward pass.
     # Once data is processed, call clear to reset the model before calling initialize_coords
     def __init__(self, in_channels, out_channels, config, D=3, **kwargs):
@@ -219,7 +219,7 @@ class Res16UNetBase(ResNetBase):
         if self.DECODER_CONV:
             self.ExpandSparseLayer = conv(
             self.PLANES[7],
-            self.PLANES[7]*4,
+            self.PLANES[7]*2,
             kernel_size=1,
             stride=1,
             bias=True,
