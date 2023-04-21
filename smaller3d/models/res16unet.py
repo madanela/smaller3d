@@ -39,7 +39,6 @@ class Res16UNetBase(ResNetBase):
         if D == 4:
             self.OUT_PIXEL_DIST = space_n_time_m(self.OUT_PIXEL_DIST, 1)
         if config.last_feature_map_included:
-            print("heeeeeeeeeeeeeeeeey!!!!\n"*50)
             self.DECODER_CONV = True
         # Output of the first conv concated to conv6
         self.inplanes = self.INIT_DIM
@@ -223,6 +222,8 @@ class Res16UNetBase(ResNetBase):
             bn_momentum=bn_momentum,
         )
         if self.DECODER_CONV:
+            print("heeeeeeeeeeeeeeeeey!!!!\n"*50)
+
             self.ExpandSparseLayer = conv(
             self.PLANES[7],
             self.PLANES[7]*2,
