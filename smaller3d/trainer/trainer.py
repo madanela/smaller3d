@@ -31,7 +31,7 @@ class SemanticSegmentation(pl.LightningModule):
         # loss
         self.ignore_label = config.data.ignore_label
         self.criterion = hydra.utils.instantiate(config.loss)
-        self.mse = hydra.utils.instantiate(config.mse)
+        self.mse = torch.nn.MSELoss
 
         # metrics
         self.confusion = hydra.utils.instantiate(config.metrics)
