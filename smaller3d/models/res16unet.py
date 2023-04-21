@@ -219,7 +219,7 @@ class Res16UNetBase(ResNetBase):
         if self.DECODER_CONV:
             self.ExpandSparseLayer = conv(
             self.PLANES[7],
-            self.PLANES[7]*2,
+            self.PLANES[7]*4,
             kernel_size=1,
             stride=1,
             bias=True,
