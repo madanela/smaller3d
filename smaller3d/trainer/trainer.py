@@ -31,6 +31,8 @@ class SemanticSegmentation(pl.LightningModule):
         # loss
         self.ignore_label = config.data.ignore_label
         self.criterion = hydra.utils.instantiate(config.loss)
+        self.mse = hydra.utils.instantiate(config.mse)
+
         # metrics
         self.confusion = hydra.utils.instantiate(config.metrics)
         self.iou = IoU()
@@ -65,7 +67,7 @@ class SemanticSegmentation(pl.LightningModule):
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.config.student_model.config.last_feature_map_included:
             sout1 = self.student_model.ExpandSparseLayer(sout1)
-            loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
+            loss += self.mse(sout1.F, tout1.F).unsqueeze(0)
 
         return {
             "loss": loss,
@@ -89,7 +91,7 @@ class SemanticSegmentation(pl.LightningModule):
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.config.student_model.config.last_feature_map_included:
             sout1 = self.student_model.ExpandSparseLayer(sout1)
-            loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
+            loss += self.mse(sout1.F, tout1.F).unsqueeze(0)
 
 
         # getting original labels

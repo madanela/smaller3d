@@ -30,6 +30,7 @@ defaults:
   - trainer: trainer
   - callbacks: callbacks
   - loss: DistillationLoss
+  - mse: torch.nn.MSELoss
 
 hydra:
   run:
