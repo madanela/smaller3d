@@ -287,9 +287,7 @@ class Res16UNetBase(ResNetBase):
 
         out = me.cat(out, out_p1)
         out = self.block8(out)
-        if self.DECODER_CONV:
-            x_out = self.ExpandSparseLayer(out)
-            return out,x_out
+
         return out
 
 

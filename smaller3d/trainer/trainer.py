@@ -57,7 +57,8 @@ class SemanticSegmentation(pl.LightningModule):
         tout1 = self.teacher_model(data)
         tout2 = self.teacher_model.final(tout1)
         sout1 = self.student_model(data)
-        sout2 = self.student_model.final(data)
+        sout2 = self.student_model.final(sout1)
+        sout1 = self.student_model.ExpandSparseLayer(sout1)
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.student_model.last_feature_map_included:
             loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
@@ -78,6 +79,7 @@ class SemanticSegmentation(pl.LightningModule):
         tout1 = self.teacher_model(data)
         tout2 = self.teacher_model.final(tout1)
         sout1 = self.student_model(data)
+        print(sout1)
         sout2 = self.student_model.final(data)
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.student_model.last_feature_map_included:
