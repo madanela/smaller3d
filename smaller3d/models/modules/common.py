@@ -140,7 +140,37 @@ def conv(
         kernel_generator=kernel_generator,
         dimension=D,
     )
+def conv_expand(
+    in_planes,
+    out_planes,
+    kernel_size,
+    stride=1,
+    dilation=1,
+    bias=False,
+    conv_type=ConvType.HYPERCUBE,
+    D=-1,
+):
+    assert D > 0, "Dimension must be a positive integer"
+    region_type, axis_types, kernel_size = convert_conv_type(conv_type, kernel_size, D)
+    kernel_generator = ME.KernelGenerator(
+        kernel_size,
+        stride,
+        dilation,
+        region_type=region_type,
+        axis_types=axis_types,
+        dimension=D,
+    )
 
+    return ME.MinkowskiConvolution(
+        in_channels=in_planes,
+        out_channels=out_planes,
+        kernel_size=kernel_size,
+        stride=stride,
+        dilation=dilation,
+        has_bias=bias,
+        kernel_generator=kernel_generator,
+        dimension=D,
+    )
 
 def conv_tr(
     in_planes,

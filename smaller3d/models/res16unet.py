@@ -2,7 +2,7 @@ import MinkowskiEngine.MinkowskiOps as me
 from MinkowskiEngine import MinkowskiReLU
 
 from smaller3d.models.resnet import ResNetBase, get_norm
-from smaller3d.models.modules.common import ConvType, NormType, conv, conv_tr
+from smaller3d.models.modules.common import ConvType, NormType, conv, conv_tr,conv_expand
 from smaller3d.models.modules.resnet_block import BasicBlock, Bottleneck
 
 
@@ -224,7 +224,7 @@ class Res16UNetBase(ResNetBase):
         if self.DECODER_CONV:
             print("heeeeeeeeeeeeeeeeey!!!!\n"*50)
 
-            self.ExpandSparseLayer = conv(
+            self.ExpandSparseLayer = conv_expand(
             self.PLANES[7],
             self.PLANES[7]*2,
             kernel_size=1,
