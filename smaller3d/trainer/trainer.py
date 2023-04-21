@@ -31,7 +31,7 @@ class SemanticSegmentation(pl.LightningModule):
         # loss
         self.ignore_label = config.data.ignore_label
         self.criterion = hydra.utils.instantiate(config.loss)
-        self.mse = torch.nn.MSELoss
+        self.mse = torch.nn.MSELoss()
 
         # metrics
         self.confusion = hydra.utils.instantiate(config.metrics)
@@ -92,7 +92,6 @@ class SemanticSegmentation(pl.LightningModule):
         if self.config.student_model.config.last_feature_map_included:
             sout1 = self.student_model.ExpandSparseLayer(sout1)
             print(sout1.shape,tout1.shape)
-            print(sout1.F)
             print(self.mse(sout1.F, tout1.F))
             loss += self.mse(sout1.F, tout1.F)#.unsqueeze(0)
 
