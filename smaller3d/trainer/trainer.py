@@ -54,13 +54,22 @@ class SemanticSegmentation(pl.LightningModule):
         data = ME.SparseTensor(coords=data.coordinates, feats=data.features)
         data.to(self.device)
 
+
+        print("Training Step!!!")
         tout1 = self.teacher_model(data)
+        print(f"{tout1.shape}")
         tout2 = self.teacher_model.final(tout1)
+        print(f"{tout2.shape}")
+
         sout1 = self.student_model(data)
+        print(f"{sout1.shape}")
+
         sout2 = self.student_model.final(sout1)
-        sout1 = self.student_model.ExpandSparseLayer(sout1)
+        print(f"{sout2.shape}")
+
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.student_model.last_feature_map_included:
+            sout1 = self.student_model.ExpandSparseLayer(sout1)
             loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
 
         return {
@@ -75,14 +84,21 @@ class SemanticSegmentation(pl.LightningModule):
         data.to(self.device)
 
 
-
+        print("Validation Step!!!")
         tout1 = self.teacher_model(data)
+        print(f"{tout1.shape}")
         tout2 = self.teacher_model.final(tout1)
+        print(f"{tout2.shape}")
+
         sout1 = self.student_model(data)
-        print(sout1)
-        sout2 = self.student_model.final(data)
+        print(f"{sout1.shape}")
+
+        sout2 = self.student_model.final(sout1)
+        print(f"{sout2.shape}")
+
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.student_model.last_feature_map_included:
+            sout1 = self.student_model.ExpandSparseLayer(sout1)
             loss += self.criterion(sout1.F, tout1.F).unsqueeze(0)
 
 
