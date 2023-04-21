@@ -91,7 +91,7 @@ class SemanticSegmentation(pl.LightningModule):
         loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.config.student_model.config.last_feature_map_included:
             sout1 = self.student_model.ExpandSparseLayer(sout1)
-            print(sout1.shape,sout2.shape)
+            print(sout1.shape,tout1.shape)
             print(self.mse(sout1.F, tout1.F))
             loss += self.mse(sout1.F, tout1.F)#.unsqueeze(0)
 
