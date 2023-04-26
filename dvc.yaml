@@ -1,0 +1,17 @@
+stages:
+  scannet:
+    cmd: poetry run python mix3d/datasets/preprocessing/scannet_preprocessing.py
+      preprocess --git_repo=data/raw/scannet/ScanNet --data_dir=data/raw/scannet/scannet
+      --save_dir=data/processed/scannet
+    deps:
+    - mix3d/datasets/preprocessing/scannet_preprocessing.py
+    outs:
+    - data/processed/scannet/color_mean_std.yaml
+    - data/processed/scannet/label_database.yaml
+    - data/processed/scannet/test
+    - data/processed/scannet/test_database.yaml
+    - data/processed/scannet/train
+    - data/processed/scannet/train_database.yaml
+    - data/processed/scannet/train_validation_database.yaml
+    - data/processed/scannet/validation
+    - data/processed/scannet/validation_database.yaml
