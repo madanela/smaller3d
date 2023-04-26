@@ -140,7 +140,7 @@ class Res16UNetBase(ResNetBase):
             self.NORM_TYPE, self.PLANES[4], D, bn_momentum=bn_momentum
         )
 
-        if self.consider_more:
+        if self.consider_more and self.DECODER_CONV:
             self.ExpandSparseLayerEncoder = conv_expand(
             self.PLANES[4],
             self.PLANES[4]*2,
