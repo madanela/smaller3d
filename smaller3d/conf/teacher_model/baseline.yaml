@@ -5,6 +5,7 @@ config:
   conv1_kernel_size: 5
   bn_momentum: 0.02
   last_feature_map_included: 0
+  consider_more: 1
 # depends on normals, color, raw_coordinates
 # varies from 3 to 9
 in_channels: ${data.in_channels}

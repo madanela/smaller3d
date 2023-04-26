@@ -17,15 +17,11 @@ class Res16UNetBase(ResNetBase):
     NON_BLOCK_CONV_TYPE = ConvType.SPATIAL_HYPERCUBE
     CONV_TYPE = ConvType.SPATIAL_HYPERCUBE_TEMPORAL_HYPERCROSS
     DECODER_CONV = None
-    # ExpandSparseLayer = None
+
     # To use the model, must call initialize_coords before forward pass.
     # Once data is processed, call clear to reset the model before calling initialize_coords
     def __init__(self, in_channels, out_channels, config, D=3, **kwargs):
-        # print("===="*200)
-        # print("just config",config)
-        # print("DECODER_CONV : ",self.DECODER_CONV)
-        # print("config last feature map is :~~",config.last_feature_map_included)
-        # print("===="*200)
+
         super().__init__(in_channels, out_channels, config, D)
 
     def network_initialization(self, in_channels, out_channels, config, D):
@@ -40,6 +36,7 @@ class Res16UNetBase(ResNetBase):
             self.OUT_PIXEL_DIST = space_n_time_m(self.OUT_PIXEL_DIST, 1)
         if config.last_feature_map_included:
             self.DECODER_CONV = True
+        self.consider_more = config.consider_more;
         # Output of the first conv concated to conv6
         self.inplanes = self.INIT_DIM
         self.conv0p1s1 = conv(
@@ -143,6 +140,15 @@ class Res16UNetBase(ResNetBase):
             self.NORM_TYPE, self.PLANES[4], D, bn_momentum=bn_momentum
         )
 
+        if self.consider_more:
+            self.ExpandSparseLayerEncoder = conv_expand(
+            self.PLANES[4],
+            self.PLANES[4]*2,
+            kernel_size=1,
+            stride=1,
+            bias=True,
+            D=D
+        )
         self.inplanes = self.PLANES[4] + self.PLANES[2] * self.BLOCK.expansion
         self.block5 = self._make_layer(
             self.BLOCK,
@@ -208,6 +214,7 @@ class Res16UNetBase(ResNetBase):
             conv_type=self.NON_BLOCK_CONV_TYPE,
             D=D,
         )
+
         self.bntr7 = get_norm(
             self.NORM_TYPE, self.PLANES[7], D, bn_momentum=bn_momentum
         )
@@ -222,7 +229,7 @@ class Res16UNetBase(ResNetBase):
             bn_momentum=bn_momentum,
         )
         if self.DECODER_CONV:
-            self.ExpandSparseLayer = conv_expand(
+            self.ExpandSparseLayerFinal = conv_expand(
             self.PLANES[7],
             self.PLANES[7]*2,
             kernel_size=1,
@@ -265,6 +272,12 @@ class Res16UNetBase(ResNetBase):
         out = self.convtr4p16s2(out)
         out = self.bntr4(out)
         out = self.relu(out)
+        if self.consider_more:
+            if self.DECODER_CONV:
+                encoder_feature_map = self.ExpandSparseLayerEncoder(out)
+            else:
+                encoder_feature_map = out
+
 
         out = me.cat(out, out_b3p8)
         out = self.block5(out)
@@ -292,7 +305,9 @@ class Res16UNetBase(ResNetBase):
 
         out = me.cat(out, out_p1)
         out = self.block8(out)
-
+        if self.consider_more:
+            return out,encoder_feature_map
+        
         return out
 
 
