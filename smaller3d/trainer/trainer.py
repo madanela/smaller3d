@@ -59,7 +59,7 @@ class SemanticSegmentation(pl.LightningModule):
         data.to(self.device)
 
 
-
+        
         if self.config.teacher_model.config.consider_more:
             tout1,teacher_encoder_output = self.teacher_model(data)
         else:
@@ -67,13 +67,15 @@ class SemanticSegmentation(pl.LightningModule):
         tout2 = self.teacher_model.final(tout1)
         if self.config.student_model.config.consider_more:
             sout1,student_encoder_output = self.student_model(data)
-            loss += self.mse(teacher_encoder_output,student_encoder_output).unsqueeze(0)
+            loss = self.mse(teacher_encoder_output,student_encoder_output).unsqueeze(0)
         else:
             sout1 = self.student_model(data)
 
         sout2 = self.student_model.final(sout1)
-
-        loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
+        if self.config.student_model.config.consider_more:
+            loss +=self.criterion(sout2.F, tout2.F).unsqueeze(0)
+        else:
+            loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.config.student_model.config.last_feature_map_included:
             sout1 = self.student_model.ExpandSparseLayerFinal(sout1)
             loss += self.mse(sout1.F, tout1.F).unsqueeze(0)
@@ -97,13 +99,15 @@ class SemanticSegmentation(pl.LightningModule):
         tout2 = self.teacher_model.final(tout1)
         if self.config.student_model.config.consider_more:
             sout1,student_encoder_output = self.student_model(data)
-            loss += self.mse(teacher_encoder_output,student_encoder_output).unsqueeze(0)
+            loss = self.mse(teacher_encoder_output,student_encoder_output).unsqueeze(0)
         else:
             sout1 = self.student_model(data)
 
         sout2 = self.student_model.final(sout1)
-
-        loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
+        if self.config.student_model.config.consider_more:
+            loss +=self.criterion(sout2.F, tout2.F).unsqueeze(0)
+        else:
+            loss = self.criterion(sout2.F, tout2.F).unsqueeze(0)
         if self.config.student_model.config.last_feature_map_included:
             sout1 = self.student_model.ExpandSparseLayerFinal(sout1)
 
