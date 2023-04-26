@@ -1,6 +1,6 @@
 # @package _group_
 deterministic: true
-max_epochs: 600
+max_epochs: 1000
 min_epochs: 1
 weights_summary: "top"
 resume_from_checkpoint: null
