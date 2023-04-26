@@ -67,7 +67,7 @@ class SemanticSegmentation(pl.LightningModule):
         tout2 = self.teacher_model.final(tout1)
         if self.config.student_model.config.consider_more:
             sout1,student_encoder_output = self.student_model(data)
-            loss = self.mse(teacher_encoder_output,student_encoder_output).unsqueeze(0)
+            loss = self.mse(teacher_encoder_output.F,student_encoder_output.F).unsqueeze(0)
         else:
             sout1 = self.student_model(data)
 
@@ -99,7 +99,7 @@ class SemanticSegmentation(pl.LightningModule):
         tout2 = self.teacher_model.final(tout1)
         if self.config.student_model.config.consider_more:
             sout1,student_encoder_output = self.student_model(data)
-            loss = self.mse(teacher_encoder_output,student_encoder_output).unsqueeze(0)
+            loss = self.mse(teacher_encoder_output.F,student_encoder_output.F).unsqueeze(0)
         else:
             sout1 = self.student_model(data)
 
