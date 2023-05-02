@@ -1,9 +1,12 @@
 # @package _group_
-_target_: smaller3d.models.Res16UNet14A
+_target_: smaller3d.models.Res16UNet34C_HALF
 config:
   dialations: [1, 1, 1, 1]
-  conv1_kernel_size: 3
+  conv1_kernel_size: 5
   bn_momentum: 0.02
+  last_feature_map_included: 0
+  consider_more: 0
+
 # depends on normals, color, raw_coordinates
 # varies from 3 to 9
 in_channels: ${data.in_channels}

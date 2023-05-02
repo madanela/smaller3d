@@ -22,8 +22,8 @@ defaults:
   - data/datasets: scannet
   - data/collation_functions: voxelize_collate
   - logging: base
-  - teacher_model: baseline
-  - student_model: half
+  - teacher_model: baseline_additional_loss
+  - student_model: half_with_encoder_decoder_loss
   - metrics: miou
   - optimizer: adamw
   - scheduler: onecyclelr
