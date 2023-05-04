@@ -26,7 +26,8 @@ Project is using hydra configs. Structure is similar to mix3d structure [mix3d](
 │   ├── processed       <- folder for preprocessed datasets
 │   └── raw     <- folder for raw datasets
 ├── config_scripts
-│   ├── README.md   <- details of test run and code structure
+│   ├── README.md   <- details of test run and code 
+├── paper
 ├── dvc.lock
 ├── dvc.yaml        <- dvc file to reproduce the data
 ├── poetry.lock
