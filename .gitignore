@@ -128,6 +128,7 @@ dmypy.json
 /saved
 /data
 /docs
+/paper/latex.zip
 
 # vim
 /.vim

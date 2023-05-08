@@ -1,7 +1,9 @@
 # smaller3d
 ### smaller models for 3D Semantic Segmentation using Minkowski engine and Knowledge Distillation methods
 
-Paper is available at: [smaller3d](https://arxiv.org/submit/4877942/view).
+Paper is available at: ```paper``` folder
+
+arxiv: [arxiv pdf](http://arxiv.org/abs/2305.03188) soon.
 
 
 ## Structure
