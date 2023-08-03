@@ -45,7 +45,7 @@ python-dotenv = "^0.12.0"
 hydra-core = "^1.0.4"
 # logging
 neptune-client = "^0.14.2"
-loguru = "^0.4.1"
+loguru = "^0.5.3"
 psutil = "^5.7.0"
 # viz
 plotly = "^4.6.0"
