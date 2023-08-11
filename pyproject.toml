@@ -40,7 +40,7 @@ volumentations = "^0.1.0"
 albumentations = "^0.4.5"
 plyfile = "^0.7.1"
 # environment control
-gitpython = "^3.1.0"
+gitpython = "^3.1.32"
 python-dotenv = "^0.12.0"
 hydra-core = "^1.0.4"
 # logging
